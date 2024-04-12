@@ -25,13 +25,13 @@ function App() {
       title: 'Break',
       completed: false,
     }
-  ]);
+  ])
 
   const [activeFilter, setActiveFilter] = useState('all');
-  const [filteredTodos, setFilteredTodos] = useState([]);
+  const [filteredTodos, setFilteredTodos] = useState(todos);
 
   const addTodo = (title) => {
-    const lastId = todos.length > 0 ? todos[todos.length - 1].id : 0;
+    const lastId = todos.length > 0 ? todos[todos.length - 1].id : 1;
 
     const newTodo = {
       id: lastId + 1,
@@ -39,7 +39,10 @@ function App() {
       completed: false
     };
 
-    setTodos([...todos, newTodo]);
+    const todoList =[...todos]
+    todoList.push(newTodo)
+
+    setTodos(todoList)
   }
 
   const handleSetComplete = (id) => {
@@ -48,18 +51,18 @@ function App() {
         return {...todo, completed: !todo.completed}
       }
       return todo;
-    });
+    })
 
-    setTodos(updatedList);
-  }
-
-  const handleDelete = (id) => {
-    const updatedList = todos.filter(todo => todo.id !== id);
     setTodos(updatedList);
   }
 
   const handleClearComplete = () => {
     const updatedList = todos.filter(todo => !todo.completed);
+    setTodos(updatedList);
+  }
+
+  const handleDelete = (id) => {
+    const updatedList = todos.filter(todo => todo.id !== id);
     setTodos(updatedList);
   }
 
@@ -79,10 +82,10 @@ function App() {
     if(activeFilter === 'all') {
       setFilteredTodos(todos);
     } else if(activeFilter === 'active') {
-      const activeTodos = todos.filter(todo => !todo.completed);
+      const activeTodos = todos.filter(todo => todo.completed=== false);
       setFilteredTodos(activeTodos);
     } else if(activeFilter === 'completed') {
-      const completedTodos = todos.filter(todo => todo.completed);
+      const completedTodos = todos.filter(todo => todo.completed=== true);
       setFilteredTodos(completedTodos);
     }
   }, [activeFilter, todos]);
@@ -94,13 +97,12 @@ function App() {
         <TodoInput addTodo={addTodo} />
         <TodoList 
           activeFilter={activeFilter}
-          
           todos={filteredTodos}
-          handleSetComplete={handleSetComplete}
-          handleDelete={handleDelete}
           showAllTodos={showAllTodos}
           showActiveTodos={showActiveTodos}
           showCompletedTodos={showCompletedTodos}
+          handleSetComplete={handleSetComplete}
+          handleDelete={handleDelete}
           handleClearComplete={handleClearComplete}
         />
       </div>
@@ -109,6 +111,7 @@ function App() {
 }
 
 export default App;
+
 
 
 
